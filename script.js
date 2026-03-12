@@ -1,16 +1,12 @@
-// Initializing Email Service
 (function initEmail() {
     emailjs.init("yoSgKP4hnFsOkrbw2");
 })();
 
-// Global state for user selections
 var mySelections = {}; 
 var subTotalValue = 0;
-
-// Logic to add or remove services
 function toggleCart(serviceName, unitPrice, element) {
     if (mySelections[serviceName]) {
-        // If it exists, remove it
+        
         delete mySelections[serviceName];
         
         element.textContent = 'Add';
@@ -19,7 +15,7 @@ function toggleCart(serviceName, unitPrice, element) {
         
         popupAlert('🗑️ Removed: ' + serviceName);
     } else {
-        // If it's new, add to object
+        
         mySelections[serviceName] = { price: unitPrice, qty: 1 };
         
         element.textContent = 'Remove';
@@ -31,18 +27,15 @@ function toggleCart(serviceName, unitPrice, element) {
     updateCartUI();
 }
 
-// Function to refresh the list and totals
 function updateCartUI() {
     var displayList = document.getElementById('cart-list');
     var totalSection = document.getElementById('cart-total');
     var taxSection = document.getElementById('cart-tax');
     
-    // Clear existing list
     displayList.innerHTML = '';
     subTotalValue = 0;
     var count = 0;
 
-    // Loop through our selection object
     for (var key in mySelections) {
         count++;
         var itemData = mySelections[key];
@@ -53,7 +46,6 @@ function updateCartUI() {
         listItem.className = 'cart-item';
         listItem.style.listStyle = 'none';
         
-        // Manual string concatenation instead of backticks (feels more "hand-written")
         listItem.innerHTML = 
             '<div class="cart-item-left">' +
                 '<span>' + key + '</span>' +
@@ -64,7 +56,7 @@ function updateCartUI() {
         displayList.appendChild(listItem);
     }
 
-    // Show or hide empty cart message
+    //empty cart message
     if (count === 0) {
         displayList.innerHTML = '<li style="color:#94a3b8; text-align:center; padding:15px;">Your cart is empty.</li>';
         totalSection.style.display = 'none';
@@ -80,12 +72,11 @@ function updateCartUI() {
     }
 }
 
-// Form Submission handling
+
 var bookingForm = document.getElementById('contact-form');
 bookingForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // Verification check
     var finalItems = [];
     for (var s in mySelections) {
         finalItems.push({
@@ -99,7 +90,7 @@ bookingForm.addEventListener('submit', function(e) {
         return;
     }
 
-    // Button feedback
+    // Button
     var submitBtn = document.getElementById('book-btn');
     submitBtn.innerText = 'Processing...';
     submitBtn.disabled = true;
@@ -107,7 +98,7 @@ bookingForm.addEventListener('submit', function(e) {
     var taxAmt = (subTotalValue * 0.05).toFixed(2);
     var totalWithTax = (subTotalValue + parseFloat(taxAmt)).toFixed(2);
 
-    // Prepare data for EmailJS
+    //data for EmailJS
     var dataPacket = {
         order_no: "ORD-" + Math.floor(Math.random() * 9999),
         from_name: document.getElementById('full_name').value,
@@ -125,12 +116,10 @@ bookingForm.addEventListener('submit', function(e) {
         .then(function() {
             document.getElementById('thank-you-msg').style.display = 'block';
             bookingForm.reset();
-            
-            // Reset state
+
             mySelections = {};
             updateCartUI();
             
-            // Reset buttons to original state
             var allButtons = document.querySelectorAll('.add-remove-btn');
             allButtons.forEach(function(b) {
                 b.textContent = 'Add';
@@ -150,7 +139,7 @@ bookingForm.addEventListener('submit', function(e) {
         });
 });
 
-// Newsletter script
+// Newsletter
 function subscribeNewsletter() {
     var n = document.getElementById('nl-name').value;
     var e = document.getElementById('nl-email').value;
@@ -165,7 +154,6 @@ function subscribeNewsletter() {
     document.getElementById('nl-email').value = '';
 }
 
-// Custom Alert / Toast
 function popupAlert(text) {
     var box = document.getElementById('toast');
     box.innerText = text;
@@ -176,7 +164,6 @@ function popupAlert(text) {
     }, 3000);
 }
 
-// Set minimum date to today
 (function setMinDate() {
     var datePicker = document.getElementById('fdate');
     if(datePicker) {
